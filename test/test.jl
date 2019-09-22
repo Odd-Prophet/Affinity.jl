@@ -2,7 +2,10 @@ include("src/Affinity.jl")
 
 using .Affinity
 
-@macroexpand @html begin
-  print("Hello")
-  2+2
+@affinity begin
+  div() do
+    h1() do
+      text("Hello")
+    end
+  end
 end
