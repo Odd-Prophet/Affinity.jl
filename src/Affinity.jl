@@ -30,16 +30,30 @@ for el in elements
   end
 
   @eval begin
-    function ($(Symbol("$el")))(text)
-      put_buffer!(string($("<$el>"), text, $("</$el>")))
+    function ($(Symbol("$el")))(text; props...)
+      tag = $("$el")
+      attrs = ""
+
+      for (k, v) in props
+        attrs *= " $k=\"$v\""
+      end
+
+      put_buffer!(string("<$(tag)$(attrs)>", text, "</$(tag)>"))
     end
   end
 
   @eval begin
-    function ($(Symbol("$el")))(children::Function)
-      put_buffer!($("<$el>"))
+    function ($(Symbol("$el")))(children::Function; props...)
+      tag = $("$el")
+      attrs = ""
+
+      for (k, v) in props
+        attrs *= " $k=\"$v\""
+      end
+
+      put_buffer!("<$(tag)$(attrs)>")
       children()
-      put_buffer!($("</$el>"))
+      put_buffer!("</$(tag)>")
     end
   end
 end
