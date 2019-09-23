@@ -30,7 +30,7 @@ for el in elements
   end
 
   @eval begin
-    function ($(Symbol("$el")))(text::String)
+    function ($(Symbol("$el")))(text)
       put_buffer!(string($("<$el>"), text, $("</$el>")))
     end
   end

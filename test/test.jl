@@ -7,7 +7,9 @@ using .Affinity
     h1() do
       text("Hello")
     end
-    
-    span("Span Text")
+
+    for i = 1:5
+      span(i)
+    end
   end
 end
