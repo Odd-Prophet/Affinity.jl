@@ -1,7 +1,9 @@
 module Affinity
 export @affinity
 
-using MacroTools
+using MacroTools: postwalk
+
+buffer = ""
 
 elements = [
   "head", "title", "style", "script",
@@ -23,28 +25,36 @@ elements = [
 for el in elements
   @eval begin
     function ($(Symbol("$el")))()
-      return string($("<$el></$el>"))
+      put_buffer!($("<$el></$el>"))
     end
   end
 
   @eval begin
-    function ($(Symbol("$el")))(str::String)
-      return string($("<$el>"), str, $("</$el>"))
+    function ($(Symbol("$el")))(text::String)
+      put_buffer!(string($("<$el>"), text, $("</$el>")))
     end
   end
 
   @eval begin
-    function ($(Symbol("$el")))(inner)
-      return string($("<$el>"), inner(), $("</$el>"))
+    function ($(Symbol("$el")))(children::Function)
+      put_buffer!($("<$el>"))
+      children()
+      put_buffer!($("</$el>"))
     end
   end
 end
 
 function text(str)
-  return str
+  put_buffer!(str)
+end
+
+function put_buffer!(str)
+  global buffer *= str
+  @show(buffer)
 end
 
 macro affinity(body)
+  global buffer = ""
   return :( $body )
 end
 
