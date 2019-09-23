@@ -50,11 +50,14 @@ end
 
 function put_buffer!(str)
   global buffer *= str
-  @show(buffer)
+end
+
+function clear_buffer!()
+  global buffer = ""
 end
 
 macro affinity(body)
-  global buffer = ""
+  clear_buffer!()
   return :( $body )
 end
 
