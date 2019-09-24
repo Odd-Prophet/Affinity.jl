@@ -1,11 +1,9 @@
 module Affinity
 export @affinity
 
-using MacroTools: postwalk
-
 buffer = ""
 
-elements = [
+paired = [
   "head", "title", "style", "script",
   "noscript", "template",
   "body", "section", "nav", "article", "aside", "h1", "h2", "h3", "h4", "h5", "h6",
@@ -22,7 +20,12 @@ elements = [
   "details", "summary", "menuitem", "menu"
 ]
 
-for el in elements
+unpaired = [
+  "meta", "link", "base",
+  "area", "br", "col", "embed", "hr", "img", "input", "keygen", "param", "source", "track", "wbr"
+]
+
+for el in paired
   @eval begin
     function ($(Symbol("$el")))()
       put_buffer!($("<$el></$el>"))
@@ -54,6 +57,21 @@ for el in elements
       put_buffer!("<$(tag)$(attrs)>")
       children()
       put_buffer!("</$(tag)>")
+    end
+  end
+end
+
+for el in unpaired
+  @eval begin
+    function ($(Symbol("$el")))(;props...)
+      tag = $("$el")
+      attrs = ""
+
+      for (k, v) in props
+        attrs *= " $k=\"$v\""
+      end
+
+      put_buffer!("<$(tag)$(attrs)>")
     end
   end
 end

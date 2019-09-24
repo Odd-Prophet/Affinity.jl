@@ -8,6 +8,8 @@ using .Affinity
       text("Hello")
     end
 
+    img(src="#")
+
     for i = 1:3
       span(i, class="span")
       span("Hi")
