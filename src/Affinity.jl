@@ -4,7 +4,7 @@ export @affinity, compile
 buffer = ""
 
 paired = [
-  "head", "title", "style", "script",
+  "html", "head", "title", "style", "script",
   "noscript", "template",
   "body", "section", "nav", "article", "aside", "h1", "h2", "h3", "h4", "h5", "h6",
   "header", "footer", "address", "main",
@@ -94,7 +94,7 @@ macro affinity(body)
 end
 
 function compile(template)
-  return :( $template )
+  return eval(Meta.parse(template))
 end
 
 end
