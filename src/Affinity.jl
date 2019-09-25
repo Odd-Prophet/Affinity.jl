@@ -1,5 +1,5 @@
 module Affinity
-export @affinity
+export @affinity, compile
 
 buffer = ""
 
@@ -91,6 +91,10 @@ end
 macro affinity(body)
   clear_buffer!()
   return :( $body )
+end
+
+function compile(template)
+  return :( $template )
 end
 
 end
