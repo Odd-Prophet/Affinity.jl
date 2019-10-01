@@ -35,11 +35,7 @@ for el in paired
   @eval begin
     function ($(Symbol("$el")))(text; props...)
       tag = $("$el")
-      attrs = ""
-
-      for (k, v) in props
-        attrs *= " $k=\"$v\""
-      end
+      attrs = parse_attributes(props)
 
       put_buffer!(string("<$(tag)$(attrs)>", text, "</$(tag)>"))
     end
@@ -48,11 +44,7 @@ for el in paired
   @eval begin
     function ($(Symbol("$el")))(children::Function; props...)
       tag = $("$el")
-      attrs = ""
-
-      for (k, v) in props
-        attrs *= " $k=\"$v\""
-      end
+      attrs = parse_attributes(props)
 
       put_buffer!("<$(tag)$(attrs)>")
       children()
@@ -65,11 +57,7 @@ for el in unpaired
   @eval begin
     function ($(Symbol("$el")))(;props...)
       tag = $("$el")
-      attrs = ""
-
-      for (k, v) in props
-        attrs *= " $k=\"$v\""
-      end
+      attrs = parse_attributes(props)
 
       put_buffer!("<$(tag)$(attrs)>")
     end
@@ -86,6 +74,16 @@ end
 
 function clear_buffer!()
   global buffer = ""
+end
+
+function parse_attributes(attrs...)
+  str = ""
+
+  for (k, v) in attrs
+    str *= " $(replace(String(k), '_' => '-'))=\"$v\""
+  end
+
+  return str
 end
 
 macro affinity(body)
