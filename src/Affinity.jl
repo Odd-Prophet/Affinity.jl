@@ -1,5 +1,5 @@
 module Affinity
-export @affinity, compile
+export compile
 
 buffer = ""
 
@@ -76,7 +76,7 @@ function clear_buffer!()
   global buffer = ""
 end
 
-function parse_attributes(attrs...)
+function parse_attributes(attrs)
   str = ""
 
   for (k, v) in attrs
@@ -84,11 +84,6 @@ function parse_attributes(attrs...)
   end
 
   return str
-end
-
-macro affinity(body)
-  clear_buffer!()
-  return :( $body )
 end
 
 function compile(template)
