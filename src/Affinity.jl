@@ -68,6 +68,10 @@ function text(str)
   put_buffer!(str)
 end
 
+function raw(html)
+  put_buffer!(html)
+end
+
 function put_buffer!(str)
   global buffer *= str
 end
