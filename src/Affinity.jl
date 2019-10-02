@@ -86,7 +86,8 @@ function parse_attributes(attrs)
   return str
 end
 
-function compile(template)
+function compile(template; ctx)
+  global context = ctx
   return eval(Meta.parse(template))
 end
 
