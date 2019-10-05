@@ -27,8 +27,11 @@ unpaired = [
 
 for el in paired
   @eval begin
-    function ($(Symbol("$el")))()
-      put_buffer!($("<$el></$el>"))
+    function ($(Symbol("$el")))(;props...)
+      tag = $("$el")
+      attrs = parse_attributes(props)
+
+      put_buffer!("<$(tag)$(attrs)></$(tag)>")
     end
   end
 
@@ -55,7 +58,7 @@ end
 
 for el in unpaired
   @eval begin
-    function ($(Symbol("$el")))(;props...)
+    function ($(Symbol("$el")))(; props...)
       tag = $("$el")
       attrs = parse_attributes(props)
 
