@@ -95,6 +95,7 @@ end
 
 function compile(template; params=Dict())
   global context = params
+  clear_buffer!()
   return eval(Meta.parse(template))
 end
 
